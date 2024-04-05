@@ -5,6 +5,9 @@
   "repository": "https://github.com/escX/RealDonation",
   "author": "escX",
   "license": "MIT",
+  "scripts": {
+    "deploy": "npx hardhat ignition deploy ignition/modules/local.js --network localhost"
+  },
   "devDependencies": {
     "@nomicfoundation/hardhat-chai-matchers": "^2.0.6",
     "@nomicfoundation/hardhat-ethers": "^3.0.5",

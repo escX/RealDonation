@@ -1,0 +1,8 @@
+/artifacts
+/cache
+/node_modules
+/coverage
+/ignition/deployments
+coverage.json
+.env
+.DS_Store

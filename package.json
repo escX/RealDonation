@@ -1,0 +1,23 @@
+{
+  "name": "RealDonation",
+  "version": "0.0.1",
+  "description": "A smart contract that can create donation channels for your projects and record donation information.",
+  "repository": "https://github.com/escX/RealDonation",
+  "author": "escX",
+  "license": "MIT",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-chai-matchers": "^2.0.6",
+    "@nomicfoundation/hardhat-ethers": "^3.0.5",
+    "@nomicfoundation/hardhat-ignition": "^0.15.0",
+    "@nomicfoundation/hardhat-ignition-ethers": "^0.15.0",
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "@nomicfoundation/hardhat-verify": "^2.0.5",
+    "@nomicfoundation/ignition-core": "^0.15.0",
+    "chai": "4",
+    "ethers": "^6.11.1",
+    "hardhat": "^2.22.2"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5"
+  }
+}

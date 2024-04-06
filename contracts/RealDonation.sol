@@ -44,7 +44,7 @@ contract RealDonation {
         string calldata name,
         string calldata description
     ) external {
-        bytes32 hash = keccak256(abi.encodePacked(msg.sender, name));
+        bytes32 hash = keccak256(abi.encode(msg.sender, name, block.timestamp));
         _created[hash] = msg.sender;
 
         emit Create(hash, msg.sender, name, description, block.timestamp);

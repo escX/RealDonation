@@ -1,5 +1,5 @@
 {
-  "name": "RealDonation",
+  "name": "real-donation",
   "version": "0.0.1",
   "description": "A smart contract that can create donation channels for your projects and record donation information.",
   "repository": "https://github.com/escX/RealDonation",

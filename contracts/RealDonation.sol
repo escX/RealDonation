@@ -35,7 +35,7 @@ event Donate(
 // 非法调用者
 error IllegalCaller(address caller);
 // 项目不存在
-error ProjectNotExist(bytes32 hash);
+error ProjectExisted(bytes32 hash);
 // 错误的参数格式
 error IncorrectStringFormat(string str);
 // 捐赠金额不足
@@ -51,22 +51,6 @@ contract RealDonation {
     modifier onlyCreator(bytes32 hash, address caller) {
         if (_project[hash].creator != caller) {
             revert IllegalCaller(caller);
-        }
-        _;
-    }
-
-    // 调用者不能是项目创建者
-    modifier notCreator(bytes32 hash, address caller) {
-        if (_project[hash].creator == caller) {
-            revert IllegalCaller(caller);
-        }
-        _;
-    }
-
-    // 项目必须存在
-    modifier projectExist(bytes32 hash) {
-        if (_project[hash].creator == address(0)) {
-            revert ProjectNotExist(hash);
         }
         _;
     }
@@ -213,18 +197,27 @@ contract RealDonation {
      * @custom:verify 捐赠金额必须大于 0
      * @custom:verify 捐赠留言长度需要符合要求
      */
-    function donate(bytes32 hash, string calldata message) external payable projectExist(hash) notCreator(hash, msg.sender) validAmount(msg.value) validString(message, 0, 256) {
+    function donate(bytes32 hash, string calldata message) external payable validAmount(msg.value) validString(message, 0, 256) {
         Project memory project = _project[hash];
-        address receiver = project.creator;
-        string memory projectName = project.name;
+        address creator = project.creator;
 
-        (bool success, ) = receiver.call{value: msg.value}("");
+        // 项目必须存在
+        if (creator == address(0)) {
+            revert ProjectExisted(hash);
+        }
+
+        // 调用者不能是项目创建者
+        if (msg.sender == creator) {
+            revert IllegalCaller(msg.sender);
+        }
+
+        (bool success, ) = creator.call{value: msg.value}("");
         if (!success) {
             revert TransactionFailed();
         }
 
         _setDonated(msg.sender, hash, msg.value);
 
-        emit Donate(hash, msg.sender, receiver, projectName, msg.value, message, block.timestamp);
+        emit Donate(hash, msg.sender, creator, project.name, msg.value, message, block.timestamp);
     }
 }

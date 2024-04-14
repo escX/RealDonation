@@ -12,12 +12,14 @@ event Create(
 
 event ModifyDescription(
     bytes32 indexed projectHash, /** 项目哈希 */
+    string projectName,          /** 项目名称 */
     string projectDescription,   /** 修改后的项目描述 */
     uint256 modifyTime           /** 修改时间 */
 );
 
 event Cease(
     bytes32 indexed projectHash, /** 项目哈希 */
+    string projectName,          /** 项目名称 */
     uint256 ceaseTime            /** 终止时间 */
 );
 
@@ -170,7 +172,9 @@ contract RealDonation {
      * @custom:verify 描述长度需要符合要求
      */
     function modifyDescription(bytes32 hash, string calldata description) external onlyCreator(hash, msg.sender) validString(description, 0, 1024) {
-        emit ModifyDescription(hash, description, block.timestamp);
+        Project memory project = _project[hash];
+
+        emit ModifyDescription(hash, project.name, description, block.timestamp);
     }
 
     /**
@@ -181,9 +185,10 @@ contract RealDonation {
      * @custom:verify 调用者必须是项目创建者
      */
     function cease(bytes32 hash) external onlyCreator(hash, msg.sender) {
+        Project memory project = _project[hash];
         delete _project[hash];
 
-        emit Cease(hash, block.timestamp);
+        emit Cease(hash, project.name, block.timestamp);
     }
 
     /**

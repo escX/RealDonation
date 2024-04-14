@@ -50,8 +50,8 @@ describe("RealDonation Contract", function () {
 
       const project = await contract.getProject(projectHash)
 
-      assert.equal(project[1], creator.address)
-      assert.equal(project[2], strName)
+      assert.equal(project.creator, creator.address)
+      assert.equal(project.name, strName)
     })
   })
 
@@ -116,10 +116,11 @@ describe("RealDonation Contract", function () {
 
     it("触发事件`ModifyDescription`", async function () {
       const { contract, creator, projectHash } = await loadFixture(createFixtrue)
+      const project = await contract.getProject(projectHash)
 
       await expect(contract.connect(creator).modifyDescription(projectHash, strDescriptionModified))
         .to.emit(contract, "ModifyDescription")
-        .withArgs(projectHash, strDescriptionModified, anyValue)
+        .withArgs(projectHash, project.name, strDescriptionModified, anyValue)
     })
   })
 
@@ -143,10 +144,11 @@ describe("RealDonation Contract", function () {
 
     it("触发事件`Cease`", async function () {
       const { contract, creator, projectHash } = await loadFixture(createFixtrue)
+      const project = await contract.getProject(projectHash)
 
       await expect(contract.connect(creator).cease(projectHash))
         .to.emit(contract, "Cease")
-        .withArgs(projectHash, anyValue)
+        .withArgs(projectHash, project.name, anyValue)
     })
   })
 
@@ -196,7 +198,7 @@ describe("RealDonation Contract", function () {
 
       await expect(contract.connect(donator).donate(projectHash, strMessage, { value: donateAmount1 }))
         .to.emit(contract, "Donate")
-        .withArgs(projectHash, donator.address, project[1], project[2], donateAmount1, strMessage, anyValue)
+        .withArgs(projectHash, donator.address, project.creator, project.name, donateAmount1, strMessage, anyValue)
     })
   })
 })
